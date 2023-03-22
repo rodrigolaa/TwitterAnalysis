@@ -25,23 +25,24 @@ export default function Home() {
       limit: limit,
     };
     const response = await fetch('https://9okq07ijr6.execute-api.us-east-1.amazonaws.com/dev/analysis', {
-      method: 'POST',
+      method: 'OPTIONS',
       headers: {
         'Content-Type': 'application/json',
-        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Origin": "*",
+
         // "Access-Control-Allow-Credentials": "true",
         // "Access-Control-Allow-Headers": "true",
         // "Access-Control-Allow-Methods": "*",
       },
       body: JSON.stringify(body),
     })
-    .then(response => response.json())
+    // .then(response => response.json())
     .then(data => console.log(data))
-    .catch(error => console.error(error));;
+    // .catch(error => console.error(error));;
 
-    console.log(response)
+    // console.log(response)
 
-    setTweets(response);
+    // setTweets(response);
   }
 
   function formatData() {
