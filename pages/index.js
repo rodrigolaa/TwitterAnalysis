@@ -1,34 +1,30 @@
 import Head from 'next/head'
 
-import { TweetList,Container} from './styles';
-
-
-// const inter = Inter({ subsets: ['latin'] })
-
+import { TweetList,Container,Form,SubmitButton} from './styles';
+import { FaTwitter, FaPlus, FaSpinner} from 'react-icons/fa';
 import { useState } from 'react';
-import moment from 'moment';
-import axios from 'axios'; 
-import { Line } from 'react-chartjs-2';
-import ReactTable from 'react-table';
-// import 'react-table/react-table.css';
 
 export default function Home() {
   const [keyword, setKeyword] = useState('');
-  const [short_language, setShortLengague] = useState('');
+
+  const [loading, setLoading] = useState(false);
   const [language, setLengague] = useState('');
   const [limit, setLimit] = useState(10);
   const [tweets, setTweets] = useState({});
   const [base64Img, setbase64Img] = useState(null);
+  const [alert, setAlert] = useState(null);
 
 
 
   async function searchTweets() {
 
     setbase64Img(null)
+    setLoading(true);
+    setAlert(null)
 
     const body = {
       keyword: keyword,
-      short_language: short_language,
+      short_language: "",
       language: language,
       limit: limit,
     };
@@ -47,31 +43,42 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
 
       return response.json();
       
     })
     .then(data => {
-      // console.log(data.body); // Logs the response body as a JavaScript object
-      // return data;
       setTweets(data.body.raw_data)
-
-      // const base64_response = data.body.sentiment_analysis_img_str
 
       setbase64Img(data.body.sentiment_analysis_img_str)
 
-      // return base64_response
+      setLoading(false)
 
     })
     .catch(error => {
+      setAlert(true)
+      setLoading(false)
       console.error('There was a problem with the fetch operation:', error);
     })
-    console.log(tweets)
+      // console.log(tweets)
     ;
     
-    
   }
+
+  function handleinputChange_Keyword(e){
+    setKeyword(e.target.value);
+    setAlert(null);
+  };
+
+  function handleinputChange_Language(e){
+    setLengague(e.target.value);
+    setAlert(null);
+  };
+  
+  function handleinputChange_Limit(e){
+    setLimit(e.target.value);
+    setAlert(null);
+  };
 
   return (
     <>
@@ -79,33 +86,28 @@ export default function Home() {
         <title>Twitter Analysis</title>
   
         <ul>
-        <h1>Search Twitter</h1>
+        <h1>
+          <FaTwitter size={25}/>
+          Twitter Analysis
+        </h1> 
+        <Form onSubmit={(event) => { event.preventDefault(); searchTweets(); }} error={alert}>
+        <input type="text" placeholder="keyword" value={keyword} onChange={handleinputChange_Keyword} />
+        <input type="text" placeholder="language" value={language} onChange={handleinputChange_Language} />
+        <input type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
+        <SubmitButton loading={loading ? 1 : 0}>
+          {loading ? (
+            <FaSpinner color="#FFF" size={14}/>
+          ) : (
+            <FaPlus color="#FFF" size={14}/>
+          )}
+        </SubmitButton>
+      </Form>
 
-        <form onSubmit={(event) => { event.preventDefault(); searchTweets(); }}>
-          <li>
-            Keyword:
-            <input type="text" value={keyword} onChange={(event) => setKeyword(event.target.value)} />
-          </li>
-          <li>
-            Short Lenguage:
-            <input type="text" value={short_language} onChange={(event) => setShortLengague(event.target.value)} />
-          </li>
-          <li>
-            Lenguage:
-            <input type="text" value={language} onChange={(event) => setLengague(event.target.value)} />
-          </li>
-          <li>
-            Limit:
-            <input type="number" value={limit} onChange={(event) => setLimit(event.target.value)} />
-          </li>
-          <button type="submit">Search</button>
-        </form>
         {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="My image" /> }
 
         </ul>
-
         </Container>
-        
+
         <TweetList>
     
         {tweets.length > 0 && (
