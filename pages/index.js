@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-import { TweetList,Container,Form,SubmitButton} from './styles';
+import { TweetList,Container,Form,SubmitButton} from '../components/styles';
 import { FaTwitter, FaPlus, FaSpinner} from 'react-icons/fa';
 import { useState } from 'react';
 
