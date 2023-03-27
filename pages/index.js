@@ -6,12 +6,15 @@ import { useState } from 'react';
 
 export default function Home() {
   const [keyword, setKeyword] = useState('');
+  const [short_language, setShortLanguage] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [language, setLengague] = useState('');
   const [limit, setLimit] = useState(10);
   const [tweets, setTweets] = useState({});
   const [base64Img, setbase64Img] = useState(null);
+  const [cloudImg, setCloudImg] = useState(null);
+
   const [alert, setAlert] = useState(null);
 
 
@@ -24,8 +27,8 @@ export default function Home() {
 
     const body = {
       keyword: keyword,
-      short_language: "",
-      language: language,
+      short_language: short_language,
+      // language: language,
       limit: limit,
     };
 
@@ -52,6 +55,8 @@ export default function Home() {
 
       setbase64Img(data.body.sentiment_analysis_img_str)
 
+      setCloudImg(data.body.cloud_img_str)
+
       setLoading(false)
 
     })
@@ -70,8 +75,8 @@ export default function Home() {
     setAlert(null);
   };
 
-  function handleinputChange_Language(e){
-    setLengague(e.target.value);
+  function handleinputChange_ShortLanguage(e){
+    setShortLanguage(e.target.value);
     setAlert(null);
   };
   
@@ -92,7 +97,7 @@ export default function Home() {
         </h1> 
         <Form onSubmit={(event) => { event.preventDefault(); searchTweets(); }} error={alert}>
         <input type="text" placeholder="keyword" value={keyword} onChange={handleinputChange_Keyword} />
-        <input type="text" placeholder="language" value={language} onChange={handleinputChange_Language} />
+        <input type="text" placeholder="short language" value={short_language} onChange={handleinputChange_ShortLanguage} />
         <input type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
         <SubmitButton loading={loading ? 1 : 0}>
           {loading ? (
@@ -103,7 +108,9 @@ export default function Home() {
         </SubmitButton>
       </Form>
 
-        {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="My image" /> }
+        {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> }
+
+        {cloudImg && <img height='250' src={`data:image/png;base64,${cloudImg}`} alt="Cloud Img" /> }
 
         </ul>
         </Container>
