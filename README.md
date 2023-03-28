@@ -2,6 +2,9 @@
 Todo:
 - [x] WordCloud image 
 - [x] Filter List of tweets
+- [ ] Fix created-at time for local desktop tomezone :tada:
+- [ ] Try to put topic information - If tweet have - like finantial, sports, news, that could be related to the keyword :tada:
+- [ ] Create personal Domain for website - "text-ai.com" :tada:
 - [ ] Change Deep Learning algoritm to roBerta :tada:
 - [ ] Create dashboard with polirity x time :tada:
 - [ ] Link to AWS Redis database :tada:
