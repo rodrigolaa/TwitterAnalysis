@@ -1,8 +1,11 @@
 import Head from 'next/head'
 
-import { TweetList,Container,Form,SubmitButton} from '../components/styles';
-import { FaTwitter, FaPlus, FaSpinner} from 'react-icons/fa';
+import { TweetList,Container,Form,SubmitButton, FilterList} from '../components/styles';
+import { FaTwitter, FaPlus, FaSpinner, FaArrowUp, FaArrowDown, FaMinusCircle} from 'react-icons/fa';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { setConfig } from 'next/config';
+
 
 export default function Home() {
   const [keyword, setKeyword] = useState('');
@@ -11,24 +14,63 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [language, setLengague] = useState('');
   const [limit, setLimit] = useState(10);
+  
   const [tweets, setTweets] = useState({});
+  const [sortTweetsUp, setSortedTweetsUp] = useState({})
+  const [sortTweetsDown, setSortedTweetsDown] = useState({})
+
   const [base64Img, setbase64Img] = useState(null);
   const [cloudImg, setCloudImg] = useState(null);
 
   const [alert, setAlert] = useState(null);
 
+  const [filters, setFilters] = useState([
+    {state: sortTweetsUp, label: 'high'},
+    {state: sortTweetsDown, label: 'low'},
+    {state: tweets, label: 'normal'},
+  ]);
 
+  const [filterIndex, setFilterIndex] = useState(0)
+
+  const [filterList, setFilterList] = useState([])
+
+  // Define the sorting functions
+const sortByPolarityAscending = (a, b) => (a.polarity > b.polarity ? 1 : -1);
+const sortByPolarityDescending = (a, b) => (a.polarity < b.polarity ? 1 : -1);
+const sortByCreatedAtAscending = (a, b) => (a.created_at > b.created_at ? 1 : -1);
+const sortByCreatedAtDescending = (a, b) => (a.created_at < b.created_at ? 1 : -1);
+
+// Define a function to get the sorted tweets based on the current filter index
+const getSortedTweets = () => {
+  switch (filterIndex) {
+    case 0:
+      return tweets;
+    case 1:
+      return [...tweets].sort(sortByPolarityAscending);
+    case 2:
+      return [...tweets].sort(sortByCreatedAtDescending);
+    default:
+      return tweets;
+  }
+};
+
+  // useEffect(() => {
+  //   async function loadingTweets(){
+  //     setFilterList(filters[filterIndex].state)
+  //   }
+  //   loadingTweets()
+  // })[filters,filterIndex]
 
   async function searchTweets() {
 
     setbase64Img(null)
+    setCloudImg(null)
     setLoading(true);
     setAlert(null)
 
     const body = {
       keyword: keyword,
       short_language: short_language,
-      // language: language,
       limit: limit,
     };
 
@@ -59,6 +101,10 @@ export default function Home() {
 
       setLoading(false)
 
+     setSortedTweetsUp(data.body.raw_data.sort((a,b) => a.polarity - b.polarity))
+     
+     setSortedTweetsDown(data.body.raw_data.sort((a,b) => b.polarity - a.polarity))
+
     })
     .catch(error => {
       setAlert(true)
@@ -85,11 +131,17 @@ export default function Home() {
     setAlert(null);
   };
 
+  function handleFilter(index){
+    setFilterIndex(index);
+    // setFilters(filters[index].state)
+    console.log(filters[filterIndex].state)
+    
+  };
+
   return (
     <>
       <Container>
         <title>Twitter Analysis</title>
-  
         <ul>
         <h1>
           <FaTwitter size={25}/>
@@ -111,18 +163,31 @@ export default function Home() {
         {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> }
 
         {cloudImg && <img height='250' src={`data:image/png;base64,${cloudImg}`} alt="Cloud Img" /> }
+            
+            <FilterList active={filterIndex}>
+              {filters.map((filter, index) => (
+                <button
+                  // type='button'
+                  key = {filter.label}
+                  onClick = {() => handleFilter(index)}
+                >
+                  {filter.label === 'high' ?
+                  <FaArrowUp color="#000" size={30} /> :
+                  filter.label === 'low' ?
+                  <FaArrowDown color="#000" size={30} /> :
+                  <FaMinusCircle color="#000" size={30} />}
 
+                </button>
+              ))}
+            </FilterList>
         </ul>
         </Container>
-
         <TweetList>
-    
         {tweets.length > 0 && (
-          
           <>
-          {tweets.map(tweet => (
+          {getSortedTweets().map(tweet=> ( 
+
             <li key={String(tweet.id)}>
-              {/* <img src={issue.user.avatar_url} alt={issue.user.login} /> */}
               <div>
               <p>{tweet.created_at}</p>
                 <strong>
@@ -137,13 +202,8 @@ export default function Home() {
             </li>
           ))}
           </>
-
         )}
         </TweetList>
-
-        
-
-
     </>
   );
 }

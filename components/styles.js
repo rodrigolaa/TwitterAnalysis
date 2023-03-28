@@ -6,11 +6,11 @@ export const Container = styled.ul`
   background-color:#0D2636;
   display: table-row;
   display: flex;
-
+  justify-content:center;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 10px;
-  margin: 80px auto;
+  margin: 40px auto;
   color: #000;
 
   img{
@@ -18,6 +18,7 @@ export const Container = styled.ul`
   border-radius: 10%;
   margin: 20px 0;
   max-width: 300px;
+  margin-right: 20px;
 }
 
   h1 {
@@ -26,43 +27,33 @@ export const Container = styled.ul`
     justify-content:center;
   }
 
-  /* li{
-        list-style: none;
-        margin-top: 10px;
-        margin-left: 5px;
-        align-items:center;
-        justify-content:center;
-        margin-right:10px;
-        font-size: 12px;
-        color: #FFF;
-        max-width: 400px;
-      
-      input{
-        margin-left: 10px;
-        width: auto;
-      }
-
-
-    }
-
-    button{
-        margin-top: 10px;
-      } */
 `;
 
 
 
 export const TweetList = styled.ul`
-  margin-top: 30px;
-  padding-top: 30px;
+  margin: 40px auto;
+
+  background-color:#0D2636;
+  margin-top: 10px;
+  padding: 10px;
   border-top: 1px solid #eee;
   list-style:none;
+  max-width: 900px;
+  /* align-items: center; */
+  /* justify-content: center; */
+  border-radius: 8px;
+  
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 
   li{
     display:flex;
     padding: 15px 10px;
 
     & + li{
+      border-top: 1px solid #eee;
+      /* padding: 15px 10px; */
+
       margin-top: 12px;
     }
 
@@ -70,6 +61,8 @@ export const TweetList = styled.ul`
     div{
       flex:1;
       margin-left: 12px;
+      margin-right: 12px;
+
 
       p{
         margin-top: 10px;
@@ -85,7 +78,7 @@ export const TweetList = styled.ul`
 
       a{
         text-decoration:none;
-        color: #222;
+        color: #FFF;
         transform: 0.3s;
 
         &:hover{
@@ -168,6 +161,55 @@ export const SubmitButton = styled.button.attrs(props => ({
     `
   }
 
+
+`
+
+// export const PageActions = styled.div`
+//   display:flex;
+//   align-items:center;
+//   justify-content: space-between;
+
+//   button{
+//     outline:0;
+//     border:0;
+//     background: grey;
+//     color: #0D2636;
+//     padding: 5px 10px;
+//     border-radius: 4px;
+//     text-decoration:none;
+//     transform: 0.3s;
+
+//     &:disabled{
+//       cursor: not-allowed;
+//       opacity: 0.5;
+//     }
+
+//     &:hover{
+//       /* color: #0D2636; */
+//       cursor: pointer;
+//     }
+
+//   }
+
+// `
+
+export const FilterList = styled.div`
+  margin: 15px 0;
+
+  button{
+    outline:0;
+    border:0;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 0 3px;
+
+    &:nth-child(${props => props.active + 1}){
+      background: #0071db;
+      color:#FFF;
+    }
+
+
+  }
 
 `
 ;
