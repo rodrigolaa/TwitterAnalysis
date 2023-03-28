@@ -1,3 +1,16 @@
+
+Todo:
+- [x] WordCloud image 
+- [x] Filter List of tweets
+- [ ] Change Deep Learning algoritm to roBerta :tada:
+- [ ] Create dashboard with polirity x time :tada:
+- [ ] Link to AWS Redis database :tada:
+- [ ] Create login structure :tada:
+- [ ] Create pages for logged in users :tada:
+- [ ] Create Payment structure for premium users :tada:
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
