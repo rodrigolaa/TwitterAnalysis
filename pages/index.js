@@ -1,25 +1,46 @@
-import Head from 'next/head'
-
-import { TweetList,Container,Form,SubmitButton, FilterList} from '../components/styles';
+import { TweetList,Container,Form,SubmitButton, FilterList, ChartContainer} from '../components/styles';
 import { FaTwitter, FaPlus, FaSpinner, FaArrowUp, FaArrowDown, FaMinusCircle} from 'react-icons/fa';
 import { useState } from 'react';
-import { useEffect } from 'react';
-import { setConfig } from 'next/config';
+import { useRef, useEffect } from 'react';
+// import ReactWordcloud from "react-wordcloud";
+// import WordCloud from 'wordcloud';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 export default function Home() {
   const [keyword, setKeyword] = useState('');
   const [short_language, setShortLanguage] = useState('');
+  const [limit, setLimit] = useState(10);
+
 
   const [loading, setLoading] = useState(false);
-  const [language, setLengague] = useState('');
-  const [limit, setLimit] = useState(10);
   
   const [tweets, setTweets] = useState({});
   const [sortTweetsUp, setSortedTweetsUp] = useState({})
   const [sortTweetsDown, setSortedTweetsDown] = useState({})
 
-  const [base64Img, setbase64Img] = useState(null);
+  // const [base64Img, setbase64Img] = useState(null);
   const [cloudImg, setCloudImg] = useState(null);
 
   const [alert, setAlert] = useState(null);
@@ -32,13 +53,39 @@ export default function Home() {
 
   const [filterIndex, setFilterIndex] = useState(0)
 
-  const [filterList, setFilterList] = useState([])
 
   // Define the sorting functions
 const sortByPolarityAscending = (a, b) => (a.polarity > b.polarity ? 1 : -1);
 const sortByPolarityDescending = (a, b) => (a.polarity < b.polarity ? 1 : -1);
-const sortByCreatedAtAscending = (a, b) => (a.created_at > b.created_at ? 1 : -1);
-const sortByCreatedAtDescending = (a, b) => (a.created_at < b.created_at ? 1 : -1);
+ 
+const sortByCreatedAtAscending = (a, b) => {
+  // a.createdAt ? 
+  const [date, time] = a.created_at.split(', ') ;
+  const [month, day, year] = date.split('/');
+  const [hours, minutes, seconds] = time.split(':');
+  const dateObjA = new Date(year, month - 1, day, hours, minutes, seconds);
+  // console.log(dateObjA)
+
+  // const dateA = new Date(a.createdAt);
+  // console.log(dateA)
+    const [date_, time_] = b.created_at.split(', ');
+    const [month_, day_, year_] = date_.split('/');
+    const [hours_, minutes_, seconds_] = time_.split(':');
+    const dateObjB = new Date(year_, month_ - 1, day_, hours_, minutes_, seconds_);
+    // console.log(dateObjB)
+
+
+  const options = { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone };
+  const formattedDateA = dateObjA.toLocaleString('en-US', options);
+  const formattedDateB = dateObjB.toLocaleString('en-US', options);
+  // console.log(formattedDateA)
+
+  const timestampA = new Date(formattedDateA).getTime();
+  const timestampB = new Date(formattedDateB).getTime();
+  // console.log(timestampA)
+
+  return timestampA - timestampB;
+};
 
 // Define a function to get the sorted tweets based on the current filter index
 const getSortedTweets = () => {
@@ -48,22 +95,64 @@ const getSortedTweets = () => {
     case 1:
       return [...tweets].sort(sortByPolarityAscending);
     case 2:
-      return [...tweets].sort(sortByCreatedAtDescending);
+      // console.log(a.createdAt)
+      return [...tweets].sort(sortByCreatedAtAscending);
     default:
       return tweets;
   }
 };
 
-  // useEffect(() => {
-  //   async function loadingTweets(){
-  //     setFilterList(filters[filterIndex].state)
-  //   }
-  //   loadingTweets()
-  // })[filters,filterIndex]
+const data = {
+  labels: tweets.length > 0 &&  getSortedTweets().map(a => a.created_at),
+  datasets: [
+    {
+      label: 'Polarity',
+      data: tweets.length > 0 && getSortedTweets().map(a => a.polarity), 
+      fill: true,
+      borderColor: 'rgba(75,192,192,1)',
+      lineColor: 'rgba(13,38,54,1)',
+      tension: 0.1,
+    },
+  ],
+};
+
+const options = {
+  responsive: true,
+  scales: {
+    xAxes: [
+      {
+        type: 'time',
+        time: {
+          unit: 'day',
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+  },
+};
+
+const LineChart = ({ data, options }) => {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    if (chartRef && chartRef.current) {
+      const myChart = new Chart(chartRef.current, {
+        type: 'line',
+        data: data,
+        options: options,
+      });
+    }
+  }, [chartData, chartOptions])};
 
   async function searchTweets() {
 
-    setbase64Img(null)
+    // setbase64Img(null)
     setCloudImg(null)
     setLoading(true);
     setAlert(null)
@@ -93,17 +182,18 @@ const getSortedTweets = () => {
       
     })
     .then(data => {
-      setTweets(data.body.raw_data)
+      setTweets(data.raw_data)
 
-      setbase64Img(data.body.sentiment_analysis_img_str)
+      // setbase64Img(data.body.sentiment_analysis_img_str)
 
-      setCloudImg(data.body.cloud_img_str)
+      setCloudImg(data.cloud_img_str)
 
-      setLoading(false)
-
-     setSortedTweetsUp(data.body.raw_data.sort((a,b) => a.polarity - b.polarity))
+     setSortedTweetsUp(data.raw_data.sort((a,b) => a.polarity - b.polarity))
      
-     setSortedTweetsDown(data.body.raw_data.sort((a,b) => b.polarity - a.polarity))
+     setSortedTweetsDown(data.raw_data.sort((a,b) => b.polarity - a.polarity))
+
+     setLoading(false)
+
 
     })
     .catch(error => {
@@ -134,7 +224,7 @@ const getSortedTweets = () => {
   function handleFilter(index){
     setFilterIndex(index);
     // setFilters(filters[index].state)
-    console.log(filters[filterIndex].state)
+    // console.log(index)
     
   };
 
@@ -160,11 +250,7 @@ const getSortedTweets = () => {
         </SubmitButton>
       </Form>
 
-        {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> }
-
-        {cloudImg && <img height='250' src={`data:image/png;base64,${cloudImg}`} alt="Cloud Img" /> }
-            
-            <FilterList active={filterIndex}>
+      <FilterList active={filterIndex}>
               {filters.map((filter, index) => (
                 <button
                   // type='button'
@@ -180,8 +266,25 @@ const getSortedTweets = () => {
                 </button>
               ))}
             </FilterList>
+
+      {tweets.length > 0  &&
+      <ChartContainer>
+      <Line data={data} options={options} />
+      </ChartContainer>}
+
+        {/* {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> } */}
+
+        {/* {cloudImg && <img height='250' src={`data:image/png;base64,${cloudImg}`} alt="Cloud Img" /> } */}
+
+        {/* <ReactWordcloud words={words} /> */}
+        {/* {render(<WordCloud data={data} />, document.getElementById('root'))} */}
+
+        {/* <WordCloud data={cloudImg} /> */}
+        
+            
         </ul>
         </Container>
+
         <TweetList>
         {tweets.length > 0 && (
           <>
@@ -206,4 +309,4 @@ const getSortedTweets = () => {
         </TweetList>
     </>
   );
-}
+          }

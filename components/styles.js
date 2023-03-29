@@ -29,6 +29,23 @@ export const Container = styled.ul`
 
 `;
 
+export const ChartContainer = styled.div `
+  height: 400px;
+  width: 100%;
+  /* display: table-row; */
+
+  margin: 10px;
+  /* padding: 20px; */
+  background-color: white;
+  align-items:center;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+`;
+
+export const ChartCanvas = styled.canvas `
+  height: 100%;
+  width: 100%;
+`;
 
 
 export const TweetList = styled.ul`
