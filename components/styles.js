@@ -13,6 +13,7 @@ export const Container = styled.ul`
   margin: 40px auto;
   color: #000;
 
+
   img{
   /* width: 150px; */
   border-radius: 10%;
@@ -32,6 +33,8 @@ export const Container = styled.ul`
 export const ChartContainer = styled.div `
   height: 400px;
   width: 100%;
+  /* width: 400px; */
+
   /* display: table-row; */
 
   margin: 10px;
@@ -45,6 +48,8 @@ export const ChartContainer = styled.div `
 export const ChartCanvas = styled.canvas `
   height: 100%;
   width: 100%;
+  /* width: 400px; */
+
 `;
 
 
@@ -122,15 +127,18 @@ export const TweetList = styled.ul`
 export const Form = styled.form`
   margin-top: 30px;
   display:flex;
-  flex-direction: row;
+  /* flex-direction: row; */
 
   input{
     flex:1;
+    display:flex;
     border: 1px solid ${props => (props.error ? '#FF0000' : '#eee')};
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 17px;
     margin-left: 10px;
+    margin-top: 10px;
+
     max-width: 100px;
 
 
@@ -158,6 +166,8 @@ export const SubmitButton = styled.button.attrs(props => ({
   border: 0;
   border-radius: 4px;
   margin-left: 10px;
+  margin-top: 10px;
+  min-height: 40px;
   padding: 0 15px;
   display: flex;
   justify-content: center;

@@ -237,10 +237,14 @@ const LineChart = ({ data, options }) => {
           <FaTwitter size={25}/>
           Twitter Analysis
         </h1> 
+
         <Form onSubmit={(event) => { event.preventDefault(); searchTweets(); }} error={alert}>
+        <li>
+
         <input type="text" placeholder="keyword" value={keyword} onChange={handleinputChange_Keyword} />
         <input type="text" placeholder="short language" value={short_language} onChange={handleinputChange_ShortLanguage} />
         <input type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
+       
         <SubmitButton loading={loading ? 1 : 0}>
           {loading ? (
             <FaSpinner color="#FFF" size={14}/>
@@ -248,6 +252,8 @@ const LineChart = ({ data, options }) => {
             <FaPlus color="#FFF" size={14}/>
           )}
         </SubmitButton>
+        </li>
+
       </Form>
 
       <FilterList active={filterIndex}>
@@ -271,6 +277,7 @@ const LineChart = ({ data, options }) => {
       <ChartContainer>
       <Line data={data} options={options} />
       </ChartContainer>}
+
 
         {/* {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> } */}
 
