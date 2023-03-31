@@ -13,8 +13,9 @@ Todo:
 - [ ] Create Payment structure for premium users :tada:
 - [ ] Check if there is a region field in the response from teh API - Like Country, City, State...
 - [ ] Create region map with polarity;
-- [ ] Drop Down Menu for short language input;
-- [ ] Change website log to another - currently is the vercel logo;
+- [x] Drop Down Menu for short language input;
+- [x] Change website log to another - currently is the vercel logo;
+- [x] Fix responsive deign in line chart;
 
 
 
