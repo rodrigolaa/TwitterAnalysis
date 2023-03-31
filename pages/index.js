@@ -1,7 +1,10 @@
-import { TweetList,Container,Form,SubmitButton, FilterList, ChartContainer} from '../components/styles';
+// import { TweetList,Container,Form,SubmitButton, FilterList, ChartContainer} from '../components/styles';
 import { FaTwitter, FaPlus, FaSpinner, FaArrowUp, FaArrowDown, FaMinusCircle} from 'react-icons/fa';
 import { useState } from 'react';
 import { useRef, useEffect } from 'react';
+import styles from '../styles/home.module.css'
+// import styles from './Dropdown.module.css';
+
 // import ReactWordcloud from "react-wordcloud";
 // import WordCloud from 'wordcloud';
 
@@ -29,6 +32,21 @@ ChartJS.register(
 
 
 export default function Home() {
+
+  const languageCodes = [
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'French' },
+  { code: 'es', label: 'Spanish' },
+  { code: 'pt', label: 'Portuguese' },
+  { code: 'de', label: 'German' },
+
+
+  // Add more language codes and labels as needed
+];
+
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+
+
   const [keyword, setKeyword] = useState('');
   const [short_language, setShortLanguage] = useState('');
   const [limit, setLimit] = useState(10);
@@ -51,8 +69,7 @@ export default function Home() {
     {state: tweets, label: 'normal'},
   ]);
 
-  const [filterIndex, setFilterIndex] = useState(0)
-
+  const [filterIndex, setFilterIndex] = useState(-1)
 
   // Define the sorting functions
 const sortByPolarityAscending = (a, b) => (a.polarity > b.polarity ? 1 : -1);
@@ -104,13 +121,16 @@ const getSortedTweets = () => {
 
 const data = {
   labels: tweets.length > 0 &&  getSortedTweets().map(a => a.created_at),
+
   datasets: [
     {
       label: 'Polarity',
       data: tweets.length > 0 && getSortedTweets().map(a => a.polarity), 
       fill: true,
       borderColor: 'rgba(75,192,192,1)',
-      lineColor: 'rgba(13,38,54,1)',
+      // lineColor: 'rgba(13,38,54,1)',
+      lineColor: 'hex(#0D2636 )',
+
       tension: 0.1,
     },
   ],
@@ -157,6 +177,7 @@ const LineChart = ({ data, options }) => {
     setLoading(true);
     setAlert(null)
 
+
     const body = {
       keyword: keyword,
       short_language: short_language,
@@ -184,15 +205,16 @@ const LineChart = ({ data, options }) => {
     .then(data => {
       setTweets(data.raw_data)
 
-      // setbase64Img(data.body.sentiment_analysis_img_str)
-
-      setCloudImg(data.cloud_img_str)
+      // setCloudImg(data.cloud_img_str)
 
      setSortedTweetsUp(data.raw_data.sort((a,b) => a.polarity - b.polarity))
      
      setSortedTweetsDown(data.raw_data.sort((a,b) => b.polarity - a.polarity))
 
      setLoading(false)
+
+    console.log("Data Fetched!")
+
 
 
     })
@@ -201,7 +223,6 @@ const LineChart = ({ data, options }) => {
       setLoading(false)
       console.error('There was a problem with the fetch operation:', error);
     })
-      // console.log(tweets)
     ;
     
   }
@@ -212,7 +233,8 @@ const LineChart = ({ data, options }) => {
   };
 
   function handleinputChange_ShortLanguage(e){
-    setShortLanguage(e.target.value);
+    // setShortLanguage(e.target.value);
+    setSelectedLanguage(e.target.value);
     setAlert(null);
   };
   
@@ -230,38 +252,52 @@ const LineChart = ({ data, options }) => {
 
   return (
     <>
-      <Container>
+      <ul className={styles.Container}>
+      <li>
         <title>Twitter Analysis</title>
-        <ul>
-        <h1>
-          <FaTwitter size={25}/>
+        <h1  className={styles.title}>
+          <span className={styles.logo}><FaTwitter size={25}/></span>
           Twitter Analysis
         </h1> 
-
-        <Form onSubmit={(event) => { event.preventDefault(); searchTweets(); }} error={alert}>
-        <li>
-
-        <input type="text" placeholder="keyword" value={keyword} onChange={handleinputChange_Keyword} />
-        <input type="text" placeholder="short language" value={short_language} onChange={handleinputChange_ShortLanguage} />
-        <input type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
-       
-        <SubmitButton loading={loading ? 1 : 0}>
-          {loading ? (
-            <FaSpinner color="#FFF" size={14}/>
-          ) : (
-            <FaPlus color="#FFF" size={14}/>
-          )}
-        </SubmitButton>
         </li>
 
-      </Form>
+        <form className={styles.Form} onSubmit={(event) => { event.preventDefault(); searchTweets(); }} error={alert}>
+        <li>
+        <input  className={`${styles.input} ${alert ? styles.error : ''}`} type="text" placeholder="keyword" value={keyword} onChange={handleinputChange_Keyword} />
+        {/* <input  className={`${styles.input} ${alert ? styles.error : ''}`} type="text" placeholder="short language" value={short_language} onChange={handleinputChange_ShortLanguage} /> */}
+        <select id="language" value={selectedLanguage} onChange={handleinputChange_ShortLanguage}>
+        <option value="">Select Language</option>
+        {languageCodes.map(({ code, label }) => (
+          <option key={code} value={code}>
+            {label}
+          </option>
+        ))}
+      </select>
+        <input  className={`${styles.input} ${alert ? styles.error : ''}`} type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
+        <button 
+        //  className={`${styles.submitButton}${loading ? 0 : 1}`}
+         className={styles.submitButton}
+         disabled= {loading}
+         type="submit"
+         >
+          {loading ? (
+            <FaSpinner className={styles.rotate} color="#FFF" size={14}/>
+          ) : (
+            <FaPlus color="#FFF" size={14}/>
+           )} 
+        </button>
+      </li>
+      </form>
 
-      <FilterList active={filterIndex}>
+      {tweets.length > 0  && (
+      <ul className={styles.FilterList} active={filterIndex}>
               {filters.map((filter, index) => (
                 <button
-                  // type='button'
+                  type='button'
                   key = {filter.label}
                   onClick = {() => handleFilter(index)}
+                  className={index === filterIndex? styles.active : ''}
+                  disabled={index === filterIndex ? 1 : 0}
                 >
                   {filter.label === 'high' ?
                   <FaArrowUp color="#000" size={30} /> :
@@ -270,40 +306,28 @@ const LineChart = ({ data, options }) => {
                   <FaMinusCircle color="#000" size={30} />}
 
                 </button>
-              ))}
-            </FilterList>
+                )
+              )}
+        </ul> 
+        )}
 
-      {tweets.length > 0  &&
-      <ChartContainer>
-      <Line data={data} options={options} />
-      </ChartContainer>}
+      {tweets.length > 0  && (
+      <li className={styles.chatContainer} >
+        <Line data={data} options={options} />
+      </li>
 
-
-        {/* {base64Img && <img height='250' src={`data:image/png;base64,${base64Img}`} alt="Bar Chart" /> } */}
-
-        {/* {cloudImg && <img height='250' src={`data:image/png;base64,${cloudImg}`} alt="Cloud Img" /> } */}
-
-        {/* <ReactWordcloud words={words} /> */}
-        {/* {render(<WordCloud data={data} />, document.getElementById('root'))} */}
-
-        {/* <WordCloud data={cloudImg} /> */}
-        
-            
-        </ul>
-        </Container>
-
-        <TweetList>
-        {tweets.length > 0 && (
-          <>
+        )}
+        {tweets.length > 0  && (
+        <ul className={styles.twitterList}>
           {getSortedTweets().map(tweet=> ( 
 
-            <li key={String(tweet.id)}>
+            <li className={styles.id} key={String(tweet.id)}>
               <div>
-              <p>{tweet.created_at}</p>
+              <p className={styles.time}>{tweet.created_at}</p>
                 <strong>
-                  <a href={tweet.url}>{tweet.text}</a>
+                  <a className={styles.link} href={tweet.url}>{tweet.text}</a>
 
-                    <span >{tweet.polarity}</span>
+                    <span className={styles.polarity}>{tweet.polarity}</span>
 
                 </strong>
 
@@ -311,9 +335,9 @@ const LineChart = ({ data, options }) => {
 
             </li>
           ))}
-          </>
+        </ul>
         )}
-        </TweetList>
+      </ul>
     </>
   );
-          }
+}

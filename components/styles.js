@@ -1,18 +1,31 @@
 import styled, {keyframes, css} from 'styled-components';
 
 export const Container = styled.ul`
-  max-width: 900px;
+  /* max-width: 900px; */
+  width: 90%;
+
   /* background: #FFF; */
   background-color:#0D2636;
-  display: table-row;
+  /* display: table-row; */
   display: flex;
-  justify-content:center;
+  /* justify-content:center; */
+  justify-content:space-around;
+  flex-direction: column;
+
+
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 10px;
   margin: 40px auto;
   color: #000;
+  list-style: none;
+  align-items:center ;
 
+
+  span{
+  padding: 10px;
+
+  }
 
   img{
   /* width: 150px; */
@@ -26,6 +39,7 @@ export const Container = styled.ul`
     color: #FFF;
     align-items:center;
     justify-content:center;
+    padding-right: 30px;
   }
 
 `;
@@ -55,13 +69,14 @@ export const ChartCanvas = styled.canvas `
 
 export const TweetList = styled.ul`
   margin: 40px auto;
-
+  list-style: none;
   background-color:#0D2636;
   margin-top: 10px;
   padding: 10px;
   border-top: 1px solid #eee;
   list-style:none;
-  max-width: 900px;
+  /* max-width: 900px; */
+  width: 90%;
   /* align-items: center; */
   /* justify-content: center; */
   border-radius: 8px;
@@ -127,7 +142,8 @@ export const TweetList = styled.ul`
 export const Form = styled.form`
   margin-top: 30px;
   display:flex;
-  /* flex-direction: row; */
+  list-style: none;
+  flex-direction: row;
 
   input{
     flex:1;
@@ -239,4 +255,3 @@ export const FilterList = styled.div`
   }
 
 `
-;
