@@ -3,32 +3,13 @@ import { FaTwitter, FaPlus, FaSpinner, FaArrowUp, FaArrowDown, FaMinusCircle} fr
 import { useState } from 'react';
 import { useRef, useEffect } from 'react';
 import styles from '../styles/home.module.css'
+import LineChart from '../components/LineChart';
+
 // import styles from './Dropdown.module.css';
 
 // import ReactWordcloud from "react-wordcloud";
 // import WordCloud from 'wordcloud';
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// import WordCloud from '../components/WordCloud';
 
 
 export default function Home() {
@@ -59,7 +40,7 @@ export default function Home() {
   const [sortTweetsDown, setSortedTweetsDown] = useState({})
 
   // const [base64Img, setbase64Img] = useState(null);
-  const [cloudImg, setCloudImg] = useState(null);
+  const [cloudImg, setCloudImg] = useState([]);
 
   const [alert, setAlert] = useState(null);
 
@@ -119,6 +100,9 @@ const getSortedTweets = () => {
   }
 };
 
+const labelsLine = tweets.length > 0 &&  getSortedTweets().map(a => a.created_at);
+const dataLine = tweets.length > 0 && getSortedTweets().map(a => a.polarity);
+
 const data = {
   labels: tweets.length > 0 &&  getSortedTweets().map(a => a.created_at),
 
@@ -127,7 +111,9 @@ const data = {
       label: 'Polarity',
       data: tweets.length > 0 && getSortedTweets().map(a => a.polarity), 
       fill: true,
-      borderColor: 'rgba(75,192,192,1)',
+      // borderColor: 'rgba(75,192,192,1)',
+      borderColor: 'hex(#0D2636 )',
+
       // lineColor: 'rgba(13,38,54,1)',
       lineColor: 'hex(#0D2636 )',
 
@@ -157,23 +143,23 @@ const options = {
   },
 };
 
-const LineChart = ({ data, options }) => {
-  const chartRef = useRef(null);
+// const LineChart = ({ data, options }) => {
+//   const chartRef = useRef(null);
 
-  useEffect(() => {
-    if (chartRef && chartRef.current) {
-      const myChart = new Chart(chartRef.current, {
-        type: 'line',
-        data: data,
-        options: options,
-      });
-    }
-  }, [chartData, chartOptions])};
+//   useEffect(() => {
+//     if (chartRef && chartRef.current) {
+//       const myChart = new Chart(chartRef.current, {
+//         type: 'line',
+//         data: data,
+//         options: options,
+//       });
+//     }
+//   }, [chartData, chartOptions])};
 
   async function searchTweets() {
 
     // setbase64Img(null)
-    setCloudImg(null)
+    setCloudImg([])
     setLoading(true);
     setAlert(null)
 
@@ -205,7 +191,8 @@ const LineChart = ({ data, options }) => {
     .then(data => {
       setTweets(data.raw_data)
 
-      // setCloudImg(data.cloud_img_str)
+    setCloudImg(data.cloud_img_str)
+
 
      setSortedTweetsUp(data.raw_data.sort((a,b) => a.polarity - b.polarity))
      
@@ -213,7 +200,9 @@ const LineChart = ({ data, options }) => {
 
      setLoading(false)
 
-    console.log("Data Fetched!")
+    // console.log("Data Fetched!")
+    // console.log(data.cloud_img_str)
+
 
 
 
@@ -247,6 +236,8 @@ const LineChart = ({ data, options }) => {
     setFilterIndex(index);
     // setFilters(filters[index].state)
     // console.log(index)
+    console.log(cloudImg)
+
     
   };
 
@@ -310,10 +301,13 @@ const LineChart = ({ data, options }) => {
               )}
         </ul> 
         )}
+        {/* {tweets.length > 0  && (
+        <WordCloud />
+        )} */}
 
       {tweets.length > 0  && (
-      <li className={styles.chatContainer} >
-        <Line data={data} options={options} />
+      <li className={styles.chartContainer} >
+        <LineChart data={dataLine} labels={labelsLine}/>
       </li>
 
         )}
