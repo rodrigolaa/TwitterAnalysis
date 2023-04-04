@@ -3,19 +3,20 @@ Todo:
 - [x] WordCloud image 
 - [x] Filter List of tweets
 - [x] Fix created-at time for local desktop tomezone :tada:
+- [x] Create dashboard with polirity x time :tada:
+- [x] Link to Firebase :tada:
+- [x] Create login structure :tada:
+- [x] Drop Down Menu for short language input;
+- [x] Change website log to another - currently is the vercel logo;
+- [x] Fix responsive deign in line chart;
 - [ ] Try to put topic information - If tweet have - like finantial, sports, news, that could be related to the keyword :tada:
 - [ ] Create personal Domain for website - "text-ai.com" :tada:
 - [ ] Change Deep Learning algoritm to roBerta :tada:
-- [x] Create dashboard with polirity x time :tada:
-- [ ] Link to AWS Redis database :tada:
-- [ ] Create login structure :tada:
 - [ ] Create pages for logged in users :tada:
 - [ ] Create Payment structure for premium users :tada:
 - [ ] Check if there is a region field in the response from teh API - Like Country, City, State...
 - [ ] Create region map with polarity;
-- [x] Drop Down Menu for short language input;
-- [x] Change website log to another - currently is the vercel logo;
-- [x] Fix responsive deign in line chart;
+
 
 
 
