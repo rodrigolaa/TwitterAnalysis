@@ -18,19 +18,25 @@
     "chart.js": "^4.2.1",
     "chartjs-adapter-moment": "^1.0.1",
     "circular-json": "^0.5.9",
+    "firebase": "^9.19.1",
     "http-proxy-middleware": "^2.0.6",
     "moment": "^2.29.4",
     "next": "13.2.4",
+    "next-auth": "^4.21.1",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-d3-cloud": "^1.0.6",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "react-table": "^7.8.0",
+    "react-tagcloud": "^2.3.1",
     "styled-components": "^5.3.9",
     "wordcloud": "^1.2.2"
   },
   "resolutions": {
     "react": "18.2.0"
+  },
+  "devDependencies": {
+    "typescript": "5.0.3"
   }
 }

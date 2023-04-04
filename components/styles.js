@@ -3,7 +3,6 @@ import styled, {keyframes, css} from 'styled-components';
 export const Container = styled.ul`
   /* max-width: 900px; */
   width: 90%;
-
   /* background: #FFF; */
   background-color:#0D2636;
   /* display: table-row; */
@@ -11,10 +10,9 @@ export const Container = styled.ul`
   /* justify-content:center; */
   justify-content:space-around;
   flex-direction: column;
-
-
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border = 0;
+  border-radius: 4px;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
   padding: 10px;
   margin: 40px auto;
   color: #000;
@@ -27,13 +25,7 @@ export const Container = styled.ul`
 
   }
 
-  img{
-  /* width: 150px; */
-  border-radius: 10%;
-  margin: 20px 0;
-  max-width: 300px;
-  margin-right: 20px;
-}
+
 
   h1 {
     color: #FFF;
@@ -76,12 +68,12 @@ export const TweetList = styled.ul`
   border-top: 1px solid #eee;
   list-style:none;
   /* max-width: 900px; */
-  width: 90%;
+  width: 100%;
   /* align-items: center; */
   /* justify-content: center; */
-  border-radius: 8px;
+  border-radius: 4px;
   
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
 
   li{
     display:flex;

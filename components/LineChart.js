@@ -48,7 +48,7 @@ const options = {
   responsive: true,
   scales: {
     x: {
-    type: 'time',
+    // type: 'time',
     // time: {
     //     unit: 'day',
     //   },
