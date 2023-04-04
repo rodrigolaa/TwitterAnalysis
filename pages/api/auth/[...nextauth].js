@@ -8,7 +8,7 @@ providers: [
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   })
 ],
-secret:  os.environ.get('JWT_SECRET') ,
+secret:  process.env.JWT_SECRET,
 }
 
 // export const authOptions = {
