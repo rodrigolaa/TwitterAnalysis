@@ -6,9 +6,6 @@ import {ChangeEvent, FormEvent, useState} from 'react'
 import {useSession} from 'next-auth/react'
 import { FaTrash } from 'react-icons/fa'
 
-
-import { TextArea } from '@/components/txtarea'
-
 import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc, getDoc, getDocs, Timestamp} from 'firebase/firestore'
 
 interface TaskProps {
@@ -111,7 +108,7 @@ export default function Task({itemTask, allComments }:TaskProps){
             </article>
         </main>
 
-        <section className={styles.commentContainer}>
+        {/* <section className={styles.commentContainer}>
             <h2>Comments:</h2>
             <form onSubmit={handleSubmitComment}>
             <TextArea
@@ -124,7 +121,7 @@ export default function Task({itemTask, allComments }:TaskProps){
             className={styles.button}>Comment</button>
             </form>
 
-        </section>
+        </section> */}
 
         <section className={styles.commentContainer}>
             <h2>All Comments:</h2>
