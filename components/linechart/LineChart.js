@@ -2,6 +2,7 @@ import { Line } from 'react-chartjs-2';
 // import { useMediaQuery } from '@material-ui/core';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import 'chartjs-adapter-moment';
+import styles from './styles.module.css'
 
 
 import {
@@ -33,7 +34,7 @@ const data = {
   labels: props.labels,
   datasets: [
     {
-      label: 'My First Dataset',
+      label: 'Sentiment Score',
       data: props.data,
       fill: true,
     //   borderColor: 'rgb(75, 192, 192)',
@@ -100,7 +101,12 @@ const smallScreenOptions = {
 const isSmallScreen = useMediaQuery('(max-width: 580px)'); // adjust breakpoint as needed
 const chartOptions = isSmallScreen ? smallScreenOptions : options;
 
-return <Line data={data} options={chartOptions} />;
+return (
+  <div className={styles.container}>
+<Line data={data} options={chartOptions} />
+
+ </div>
+);
 
 }
 ;

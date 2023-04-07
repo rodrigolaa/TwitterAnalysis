@@ -10,7 +10,7 @@ export const Container = styled.ul`
   /* justify-content:center; */
   justify-content:space-around;
   flex-direction: column;
-  border = 0;
+  border: 0;
   border-radius: 4px;
   /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
   padding: 10px;

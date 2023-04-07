@@ -182,12 +182,12 @@
     color: #fff;
   }
 
-  .chartAnalysis{
+  /* .chartAnalysis{
     display: flex;
     flex-direction: column;
     list-style: none;
 
-  }
+  } */
 
   .chartCloud{
     height: 100%;
@@ -201,7 +201,7 @@
     border-radius: 4px;
 }
 
-  .chartContainer{
+  /* .chartContainer{
     height: 100%;
     width: 100%;
     min-height: 502px; 
@@ -211,7 +211,7 @@
     background-color: white;
     align-items:center;
     border-radius: 4px;
-}
+}  */
 
 .chartCanvas{
     height: 100%;

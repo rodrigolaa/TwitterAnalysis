@@ -3,7 +3,7 @@ import { FaTwitter, FaPlus, FaSpinner, FaArrowUp, FaArrowDown, FaMinusCircle } f
 import { useState } from 'react';
 import { useRef, useEffect } from 'react';
 import styles from '../styles/home.module.css'
-import LineChart from '../components/LineChart';
+import LineChart from '../components/linechart/LineChart';
 import { GetServerSideProps } from 'next';
 import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc, DocumentData, Query, getDocs, updateDoc } from 'firebase/firestore'
 import SimpleCloud from '../components/wordcloud/WordCloud';
@@ -185,12 +185,14 @@ export default function Home({ user }: HomeProps) {
   async function handleKeywordSave(event) {
     event.preventDefault();
 
-    console.log(tweets[0].keyword)
+    //console.log(tweets[0].keyword)
 
-    const queryTweets = query(collection(db, 'keyword'), where('keyword', '==', tweets[0].keyword), where('userId', '==', user.id))
+    const queryTweets = query(collection(db, 'keyword'), 
+    where('keyword'.toLowerCase().replace(/\s/g, ''), '==', tweets[0].keyword.toLowerCase().replace(/\s/g, '')), 
+    where('userId', '==', user.id))
 
     const snapshotComments = await getDocs(queryTweets)
-    // console.log(snapshotComments)
+    console.log(snapshotComments)
 
     if (!snapshotComments.empty) {
 
@@ -198,12 +200,14 @@ export default function Home({ user }: HomeProps) {
 
       snapshotComments.forEach(async (documentSnapshot) => {
         const documentId = documentSnapshot.id;
+        
         documentIds.push(documentId);
+
         const currentTweets = documentSnapshot.data().tweets || [];
-        // console.log(currentTweets)
+        
         const currentCloudImg = documentSnapshot.data().cloudImg || [];
-        console.log(currentCloudImg[0])
-        // console.log(documentIds[0])
+        
+        console.log(documentIds[0])
         try {
           await updateDoc(doc(db, "keyword", documentIds[0]), {
 
@@ -211,14 +215,18 @@ export default function Home({ user }: HomeProps) {
             tweets: currentTweets.concat(tweets),
 
           });
+          console.log("Worked to update data base with same collection")
+
         } catch (err) {
           console.log(err)
         }
-
+        return;
 
       })
     }
 
+    else {
+      console.log("No tweet with this user name and keyword")
 
     try {
       await addDoc(collection(db, "keyword"), {
@@ -241,7 +249,7 @@ export default function Home({ user }: HomeProps) {
     }
 
   }
-
+  }
   return (
     <ul className={styles.Container}>
       <li>
@@ -262,7 +270,6 @@ export default function Home({ user }: HomeProps) {
           </select>
           <input className={`${styles.input} ${alert ? styles.error : ''}`} type="text" placeholder="limit (0-100)" value={limit} onChange={handleinputChange_Limit} />
           <button
-            //  className={`${styles.submitButton}${loading ? 0 : 1}`}
             className={styles.submitButton}
             disabled={loading}
             type="submit"
@@ -300,25 +307,21 @@ export default function Home({ user }: HomeProps) {
 
             </button>
           )
+
           )}
         </ul>
       )}
       {tweets.length > 0 && (
-        <ul className={styles.chartAnalysis}>
+      // <SimpleCloud data={cloudImg} />
 
-          <li className={styles.chartContainer} >
+      // <section  className={styles.chartContainer}>
+      <LineChart data={dataLine} labels={labelsLine} />
+        // </section>    
+        )}
+        {tweets.length > 0 && (  
+        <SimpleCloud data={cloudImg} />
 
-            <LineChart data={dataLine} labels={labelsLine} />
-          </li>
-
-          <li className={styles.chartCloud}>
-            <SimpleCloud data={cloudImg} />
-
-          </li>
-
-        </ul>
-
-      )}
+              )}
 
       {tweets.length > 0 && (
         <ul className={styles.twitterList}>
@@ -348,7 +351,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   const session = await getSession({ req })
 
-  // console.log(session)
   if (!session?.user) {
     return {
       props: {

@@ -2,6 +2,17 @@
     width: 100%;
     padding: 0 18px 0 0;
 
+        background-color:#0D2636;
+        display: flex;
+        /* justify-content:space-around; */
+        flex-direction: column;
+        border: 0;
+        padding: 10px;
+        margin: 0 ;
+        list-style: none;
+        align-items:center ;
+      
+    
 }
 
 .content {
@@ -13,6 +24,15 @@
     justify-content: center;
     flex-direction: column;
     padding: 0 18px 0 0;
+
+        display: flex;
+        /* justify-content:space-around; */
+        flex-direction: column;
+        border: 0;
+        padding: 10px;
+        margin: 0 ;
+        list-style: none;
+        align-items:center ;
     
 }
 
@@ -20,6 +40,10 @@
     margin-bottom: 8px;
     width: 100%;
     list-style: none;
+    align-items:center ;
+    margin: 0 ;
+    display: flex;
+    
 }
 
 .tweetContent p {
@@ -30,7 +54,7 @@
 
 .keyword{
     list-style: none;
-    max-width: 1024px;
+    /* max-width: 1024px; */
     width: 100%;
     padding: 0 18px;
     padding-bottom: 28px;
@@ -39,29 +63,17 @@
 }
 
 
-.chartContainer{
+/* .chartContainer{
     height: 100%;
     width: 100%;
-    min-height: 502px; 
-    max-width: 1024px;
+    /* min-height: 502px; 
+    /* max-width: 1024px; 
     list-style: none;
     margin-top: 14px;
     background-color: white;
     align-items:center;
     border-radius: 4px;
-}
-
-.chartCloud{
-    height: 100%;
-    width: 100%;
-    min-height: 192px; 
-    max-width: 1024px;
-    list-style: none;
-    margin-top: 14px;
-    background-color: white;
-    align-items:center;
-    border-radius: 4px;
-}
+*/
 
 /* .checkBoxArea label{
     margin-left: 8px ;
@@ -88,69 +100,18 @@
     font-size: 18px;
 }
 
-.taskContainer {
-    margin: 34px auto 0 auto;
-    padding: 0 18px;
-    width: 100%;
-    max-width: 1024px;
-}
 
-.taskContainer a{
-    text-decoration: none;
-    color: #0f0f0f;
-}
 
-.taskContainer h1 {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 14px;
-}
-.task {
-    margin-bottom: 14px;
-    line-height: 150%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border: 1.5px solid #909090;
-    border-radius: 4px;
-    padding: 14px;
-}
-
-.tagContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-}
-
-.tag {
-    background-color: #3183ff;
-    padding: 2px 6px;
-    color: #fff;
-    border-radius: 4px;
-    font-size: 12px;
-};
-
-.shareButton {
-    background: transparent;
-    border: 0;
-    margin: 0 8px ;
-    cursor: pointer;
-}
-
-.taskContent {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-
-}
-
-.taskContent p {
-    white-space: pre-wrap;
-}
 
 .trashButton {
+    cursor: pointer;
+    background: transparent ;
+    border: 0;
+    margin: 0 8px ;
+
+}
+
+.expandButton {
     cursor: pointer;
     background: transparent ;
     border: 0;

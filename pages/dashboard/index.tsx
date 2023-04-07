@@ -1,18 +1,18 @@
 
 import { GetServerSideProps } from 'next';
-import { ChangeEvent, FormEvent, useState, useEffect} from 'react';
+import {  useState, useEffect} from 'react';
 import styles from './styles.module.css'
 import Head from 'next/head'
 import { getSession } from 'next-auth/react';
-import {FiShare2} from 'react-icons/fi'
+import { FiChevronDown} from 'react-icons/fi'
 import {FaTrash } from 'react-icons/fa'
 
 import db from '../../services/firebaseConnection'
 
-import LineChart from '../../components/LineChart'
+import LineChart from '../../components/linechart/LineChart'
 
 
-import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc, DocumentData, Query, getDocs} from 'firebase/firestore'
+import {  collection, query, orderBy, where, onSnapshot, doc, deleteDoc,  getDocs} from 'firebase/firestore'
 
 import Link from 'next/link';
 import React from 'react';
@@ -37,9 +37,14 @@ userName: string
 
 export default function Dashboard({ user  }:HomeProps){
 
+    const [isExpanded, setIsExpanded] = useState(false);
     const [input, setInput] = useState('')
     const [publicTask, setPublicTask] = useState(false)
     const [keywords, setKeywords] = useState<TwitterProps[]>([])
+
+    const handleToggleExpand = () => {
+        setIsExpanded(!isExpanded);
+      };
 
     useEffect(() => { 
         async function loadTasks() {
@@ -63,7 +68,7 @@ export default function Dashboard({ user  }:HomeProps){
                 });
                });
 
-               console.log("a tweets é:", list[0]['tweets'][0]['created_at']);
+               //console.log("a tweets é:", list[0]['tweets'][0]['created_at']);
                setKeywords(list);
 
             })
@@ -71,6 +76,7 @@ export default function Dashboard({ user  }:HomeProps){
         loadTasks();
     }, [user.id])
 
+   
     
 
 
@@ -140,59 +146,45 @@ export default function Dashboard({ user  }:HomeProps){
 
             <main>
             <section className={styles.content}>
-            <h1>My Tweets</h1>
+            <h1>My Tweets:</h1>
 
             {keywords.map((item) => (
-                <div >
-                <ul className={styles.tweetContent}>
-                        
-                        <li key={item.id} className={styles.keyword}>
-                            {/* <div className={styles.tagContainer}>
-                            <label className={styles.tag}>
-                                Public
-                            </label>
-                            <button className={styles.trashButton} 
-                                    onClick={() => handleShare(item.id)}>
-                                <FiShare2
-                                size={22}
-                                color="#3183ff"
-                                />
-                            </button>
-                        </div> */}
-                    </li>
-                    <li>
-                                <button className={styles.trashButton}>
-                                    <FaTrash
-                                        size={18}
-                                        color="#ea3140"
-                                        onClick={() => handleDeleteTask(item.id)}
-                                    />
-                                </button>
-                            </li>
-
-                        
-                            <li>
-                                <Link href={`/tweet/${item.id}`}>
-                                    <p>{item.keyword}</p>
-                                </Link>
-                            </li>
-
-                            <li className={styles.chartContainer} >
-
-                                <LineChart data={
-                                    item['tweets'].map((tweet) => tweet.polarity)
-                                }
-                                    labels={item['tweets'].map((tweet) => tweet.created_at)} />
-                            </li>
-                        <li className={styles.chartCloud}>
-                            <SimpleCloud data={item['cloudImg']} />
-
-                        </li>
-                            
-
-                        </ul>
-                                
-                        </div>
+            <ul className={styles.tweetContent}>
+            <li key={item.id} className={styles.keyword}>
+                <li>
+                    <button className={styles.trashButton}>
+                        <FaTrash
+                            size={18}
+                            color="#ea3140"
+                            onClick={() => handleDeleteTask(item.id)}
+                        />
+                    </button>
+                </li>
+                <li>
+                <button className={styles.expandButton}>
+                        <FiChevronDown
+                            size={18}
+                            color="#ea3140"
+                            onClick={() => handleToggleExpand()}
+                        />
+                        {isExpanded ? 'Hide' : 'Expand'}
+                    </button>
+            </li>
+                <li>
+                    <Link href={`/tweet/${item.id}`}>
+                        <p>{item.keyword}</p>
+                    </Link>
+                </li>
+                </li>
+                {isExpanded && (
+                <section>
+                <LineChart data={item['tweets'].map((tweet) => tweet.polarity)}
+                    labels={item['tweets'].map((tweet) => tweet.created_at)} />
+                <SimpleCloud data={item['cloudImg']} />
+                
+                </section>
+                    )}
+                     </ul>
                     ))}
             </section>
             </main>

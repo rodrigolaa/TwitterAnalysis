@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
     <TagCloud tags={words100} 
         minSize={8}
         maxSize={35}
-      onClick={tag => alert(`'${tag.count}' was selected!`)} />   
+      onClick={tag => alert(`${tag.count} x`)} />   
     </div>
   );
 };
