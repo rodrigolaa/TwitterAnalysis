@@ -16,7 +16,7 @@ Todo:
 - [ ] Create Payment structure for premium users :tada:
 - [ ] Check if there is a region field in the response from teh API - Like Country, City, State...
 - [ ] Create region map with polarity;
-
+- [ ] About Page;
 
 
 
