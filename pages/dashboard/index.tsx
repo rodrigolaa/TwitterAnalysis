@@ -4,7 +4,7 @@ import {  useState, useEffect} from 'react';
 import styles from './styles.module.css'
 import Head from 'next/head'
 import { getSession } from 'next-auth/react';
-import { FiChevronDown} from 'react-icons/fi'
+import { FiChevronDown,FiChevronUp } from 'react-icons/fi'
 import {FaTrash } from 'react-icons/fa'
 
 import db from '../../services/firebaseConnection'
@@ -30,6 +30,7 @@ id: string,
 created: Date,
 tweets: { [key: string]: any }[],
 cloudImg:{ [key: string]: any }[],
+//cloudImg: Map<string, any[]>,
 keyword: string,
 userId: string
 userName: string
@@ -38,13 +39,11 @@ userName: string
 export default function Dashboard({ user  }:HomeProps){
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [expandedIndices, setExpandedIndices] = useState([]);
     const [input, setInput] = useState('')
     const [publicTask, setPublicTask] = useState(false)
     const [keywords, setKeywords] = useState<TwitterProps[]>([])
 
-    const handleToggleExpand = () => {
-        setIsExpanded(!isExpanded);
-      };
 
     useEffect(() => { 
         async function loadTasks() {
@@ -68,7 +67,7 @@ export default function Dashboard({ user  }:HomeProps){
                 });
                });
 
-               //console.log("a tweets é:", list[0]['tweets'][0]['created_at']);
+               //console.log("o cloudImg é:", list[0]['cloudImg']);
                setKeywords(list);
 
             })
@@ -77,43 +76,7 @@ export default function Dashboard({ user  }:HomeProps){
     }, [user.id])
 
    
-    
 
-
-    // function handleChangePublic(event: ChangeEvent<HTMLInputElement>) {
-    //     setPublicTask(event.target.checked)
-    // }
-
-    // async function handleNewKeyword(event) {
-    //     event.preventDefault();
-    //     if( input === "") return;
-
-    //     try{
-    //     await addDoc(collection(db, "keywords"), {
-    //         keyword: input,
-    //         created: new Date(),
-    //         userId: user.id,
-    //         name: user.name,
-    //     });
-
-    //     setInput("")
-    //     setPublicTask(false)
-
-    //     // toast.success("Tarefa registrada com sucesso!")
-    //     }
-    //     catch(err) {
-    //         console.log(err)
-    //     }
-
-    //     }
-
-    //     async function handleShare(id:string) {
-    //         await navigator.clipboard.writeText(
-    //             `${process.env.NEXT_PUBLIC_URL}/tweet/${id}`
-    //         );
-
-    //         alert("URL copied!")
-    //     }
 
         async function handleDeleteTask(id:string){
 
@@ -137,7 +100,16 @@ export default function Dashboard({ user  }:HomeProps){
 
         }
 
-
+        const handleToggleExpand = (id) => {
+            //setIsExpanded(!isExpanded);
+            //setExpandedIndex(id === expandedIndex ? -1 : id);
+            if (expandedIndices.includes(id)) {
+                setExpandedIndices(expandedIndices.filter((i) => i !== id));
+              } else {
+                setExpandedIndices([...expandedIndices, id]);
+              }
+          };
+    
     return(
         <div className={styles.container}>
             <Head>
@@ -149,9 +121,12 @@ export default function Dashboard({ user  }:HomeProps){
             <h1>My Tweets:</h1>
 
             {keywords.map((item) => (
-            <ul className={styles.tweetContent}>
-            <li key={item.id} className={styles.keyword}>
-                <li>
+            //<ul className={styles.tweetContent}>
+            <ul className={styles.keyword}>
+                <ul className={styles.keywordButtons} key={item.id}>
+                    <Link href={`/tweet/${item.id}`}>
+                        <p>{item.keyword}</p>
+                    </Link>
                     <button className={styles.trashButton}>
                         <FaTrash
                             size={18}
@@ -159,34 +134,49 @@ export default function Dashboard({ user  }:HomeProps){
                             onClick={() => handleDeleteTask(item.id)}
                         />
                     </button>
-                </li>
-                <li>
+                
+                {expandedIndices.includes(item.id)  ? 
+
                 <button className={styles.expandButton}>
+                <FiChevronUp
+                size={18}
+                color="#FFF"
+                onClick={() => handleToggleExpand(item.id)}
+            /></button>
+            : 
+            <button className={styles.expandButton}>
                         <FiChevronDown
                             size={18}
-                            color="#ea3140"
-                            onClick={() => handleToggleExpand()}
-                        />
-                        {isExpanded ? 'Hide' : 'Expand'}
-                    </button>
-            </li>
-                <li>
-                    <Link href={`/tweet/${item.id}`}>
-                        <p>{item.keyword}</p>
-                    </Link>
-                </li>
-                </li>
-                {isExpanded && (
-                <section>
+                            color="#FFF"
+                            onClick={() => handleToggleExpand(item.id)}
+                        /></button>
+                        
+            }
+               </ul> 
+                
+                {expandedIndices.includes(item.id) &&  (
+                <ul  className=
+                //{styles.lineAndCloud}
+                {`${styles.lineAndCloud}
+                ${
+                    //TODO Transiction not working
+                     styles.expanded 
+                }`}
+                >
                 <LineChart data={item['tweets'].map((tweet) => tweet.polarity)}
                     labels={item['tweets'].map((tweet) => tweet.created_at)} />
                 <SimpleCloud data={item['cloudImg']} />
                 
-                </section>
+                </ul>
                     )}
-                     </ul>
+            </ul>
+
+                
+
+                    //</ul>
                     ))}
-            </section>
+
+                    </section>
             </main>
         </div>
 

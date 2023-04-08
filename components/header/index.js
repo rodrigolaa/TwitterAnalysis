@@ -15,7 +15,7 @@ export function Header(){
                 <nav className={styles.nav}>
                     <Link href="/">
                         <h1 className={styles.logo}>
-                            Twitter Analysis <span><FaTwitter size={25}/></span>
+                            Twitter Analysis <span><FaTwitter/></span>
                             </h1>
                     </Link>
                     {session?.user && (

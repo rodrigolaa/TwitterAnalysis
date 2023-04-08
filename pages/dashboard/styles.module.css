@@ -1,16 +1,15 @@
 .container {
     width: 100%;
     padding: 0 18px 0 0;
-
-        background-color:#0D2636;
-        display: flex;
-        /* justify-content:space-around; */
-        flex-direction: column;
-        border: 0;
-        padding: 10px;
-        margin: 0 ;
-        list-style: none;
-        align-items:center ;
+    background-color:#0D2636;
+    display: flex;
+    /* justify-content:space-around; */
+    flex-direction: column;
+    border: 0;
+    padding: 10px;
+    margin: 0 ;
+    list-style: none;
+    
       
     
 }
@@ -23,73 +22,58 @@
     color: #FFF;
     justify-content: center;
     flex-direction: column;
-    padding: 0 18px 0 0;
-
-        display: flex;
-        /* justify-content:space-around; */
-        flex-direction: column;
-        border: 0;
-        padding: 10px;
-        margin: 0 ;
-        list-style: none;
-        align-items:center ;
-    
-}
-
-.tweetContent {
-    margin-bottom: 8px;
-    width: 100%;
-    list-style: none;
-    align-items:center ;
+    /* justify-content:space-around; */
+    flex-direction: column;
+    border: 0;
+    padding: 0px;
     margin: 0 ;
-    display: flex;
+    list-style: none;
     
 }
 
-.tweetContent p {
-    color: #fff;
-    margin-bottom: 8px;
-    width: 100%;
-}
+
 
 .keyword{
     list-style: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
     /* max-width: 1024px; */
     width: 100%;
     padding: 0 18px;
-    padding-bottom: 28px;
+    padding-top: 10px;
     margin-left: 30px;
     margin-top: 58px;
+    flex-direction: row;
+    display: flex;
+    justify-content: left;
+    align-items: up;
 }
-
-
-/* .chartContainer{
-    height: 100%;
-    width: 100%;
-    /* min-height: 502px; 
-    /* max-width: 1024px; 
+.keywordButtons{
     list-style: none;
-    margin-top: 14px;
-    background-color: white;
-    align-items:center;
-    border-radius: 4px;
-*/
-
-/* .checkBoxArea label{
-    margin-left: 8px ;
-
-    
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.checkBoxArea {
-    margin:14px 0px ;
+
+.lineAndCloud {
+    list-style: none;
+    /* max-width: 1024px; */
+    width: 100%;
+    padding: 0;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    flex-direction: row;
+    display: flex;
+    overflow: hidden;
+    height: auto;
+    transition: height 1s ease-out;
 }
-
-.checkBox {
-    width: 18px;
-    height: 18px;
-} */
-
+.expanded {
+    max-height: 1000px; /* adjust to a suitable maximum height */
+  }
 .button {
     width: 100%;
     border: 0;
@@ -118,3 +102,13 @@
     margin: 0 8px ;
 
 }
+
+@media screen  and (max-width: 800px) {
+
+    .keyword{
+      flex-direction: column;
+    }
+    .lineAndCloud {
+        flex-direction: column;
+      }
+  }
